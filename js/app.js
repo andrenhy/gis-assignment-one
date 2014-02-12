@@ -23,8 +23,10 @@
 				// });
 				// map.addLayer(road);	
 		d3.csv('data/sfpd_incident_2014.csv', function(err, incident){
+			$('#overlayLoading h1').html('Building roads...');
 			d3.json('data/simpleRoad.geojson', function(err, road){
 				d3.csv('data/sanfranPoliceStations.csv', function(err, station){
+				$('#overlayLoading h1').html('Locating police stations...');
 				//Implement Choropleth Layer
 				// Some hack job for the lack of a colorBrewer script
 				function getColor(d) {
@@ -164,7 +166,7 @@
 							}
 						} if (mapid == 'income') {
 							if(layerGrp.hasLayer(incomeLayer)) {
-								map.removeLayer(incomeLayer);
+								layerGrp.removeLayer(incomeLayer);
 							} else {
 								layerGrp.addLayer(incomeLayer);
 							}
@@ -184,32 +186,34 @@
 
 				});
 
-				$("#sortable" ).on("sortupdate", function( event, ui) {
-					layerGrp.clearLayers();
-					var mapholder = [];
+				$("#sortable" ).on("sortupdate", function( event, ui) {		
+					// layerGrp.clearLayers();
+					var revList = [];
 					$("#sortable li").each( function() {
 						var mapid = $(this).attr('id');
-						if(mapid == 'road') {
-							mapholder.push(mapid);
-						} if (mapid == 'income') {
-							mapholder.push(mapid);
-						} if (mapid == 'district') {
-							mapholder.push(mapid);
-						} if (mapid == 'overview') {
-							mapholder.push(mapid);
+						if(layerGrp.hasLayer(roadLayer) && mapid == 'road') {
+							revList.push(mapid);
+						} if(layerGrp.hasLayer(incomeLayer) && mapid == 'income') {
+							revList.push(mapid);
+						} if(layerGrp.hasLayer(pDistLayer) && mapid == 'district') {
+							revList.push(mapid);
+						} if(layerGrp.hasLayer(overviewLayer) && mapid == 'overview') {
+							revList.push(mapid);
 						}
 					});
 
-					for (var i = mapholder.length -1 ; i >= 0; i--) {
+						layerGrp.clearLayers();
+
+					for (var i = revList.length -1; i >= 0; i--) {
 							// console.log(mapholder[i]);
-						if(mapholder[i] == 'road') {
-							roadLayer.addTo(layerGrp);
-						} if (mapholder[i] == 'income') {
-							incomeLayer.addTo(layerGrp);
-						} if (mapholder[i] == 'district') {
-							pDistLayer.addTo(layerGrp);
-						} if (mapholder[i] == 'overview') {
-							overviewLayer.addTo(layerGrp);
+						if(revList[i] == 'road') {
+							layerGrp.addLayer(roadLayer);
+						} if (revList[i] == 'income') {
+							layerGrp.addLayer(incomeLayer);
+						} if (revList[i] == 'district') {
+							layerGrp.addLayer(pDistLayer);
+						} if (revList[i] == 'overview') {
+							layerGrp.addLayer(overviewLayer);
 						}
 					}
 						layerGrp.addTo(map);
@@ -233,7 +237,8 @@
 				 //  	// 	}
 				 //  	});
 
-// Closes the nested d3 function calls.			
+// Closes the nested d3 function calls.
+					$('#overlayLoading').css('display', 'none');			
 				});
 			});	
 		});
@@ -283,12 +288,12 @@
 				var arsonPoints = L.geoJson(arsonCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-				            layer.bindPopup(
-				            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
-				            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
-				            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
-				            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
-				            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
+			            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		arsonCrimeLayer.addLayer(arsonPoints);
@@ -298,7 +303,12 @@
 				var assaultPoints = L.geoJson(assaultCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		assaultCrimeLayer.addLayer(assaultPoints);
@@ -308,7 +318,12 @@
 				var robberyPoints = L.geoJson(robberyCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		robberyCrimeLayer.addLayer(robberyPoints); 
@@ -319,7 +334,12 @@
 				var drugPoints = L.geoJson(drugCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		drugCrimeLayer.addLayer(drugPoints); 
@@ -330,7 +350,12 @@
 				var kidnapPoints = L.geoJson(kidnapCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		kidnapCrimeLayer.addLayer(kidnapPoints);          		
@@ -341,7 +366,12 @@
 				var prostitutionPoints = L.geoJson(prostitutionCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		prostitutionCrimeLayer.addLayer(prostitutionPoints);   
@@ -351,7 +381,12 @@
 				var sexPoints = L.geoJson(sexCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		sexCrimeLayer.addLayer(sexPoints);  
@@ -361,7 +396,12 @@
 				var weaponPoints = L.geoJson(weaponCrimeData, {
     				onEachFeature: function (feature, layer)
         			{
-        				layer.bindPopup(feature.properties.Descript);
+		            layer.bindPopup(
+			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
+			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
+			            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
+			            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
+			            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>');
         			}
         		});   
         		weaponCrimeLayer.addLayer(weaponPoints);   
@@ -387,5 +427,7 @@
 						collapsed: false
 						}
 					).addTo(map);
+
+
 
 		});
