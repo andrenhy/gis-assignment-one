@@ -27,15 +27,22 @@
 			d3.json('data/simpleRoad.geojson', function(err, road){
 				d3.csv('data/sanfranPoliceStations.csv', function(err, station){
 				$('#overlayLoading h1').html('Locating police stations...');
+
 				//Implement Choropleth Layer
 				// Some hack job for the lack of a colorBrewer script
+
+				var color = d3.scale.quantize()
+								.domain([10100,71000])
+								.range(['#FFFFFF', '#BD0026']);
+
+
 				function getColor(d) {
-				    return d > 71000  ? '#BD0026' :
-				           d > 61000  ? '#E31A1C' :
-				           d > 47920 ? '#FC4E2A' :
-				           d > 35400 ? '#FD8D3C' :
-				           d > 26404 ? '#FEB24C' :
-				           d > 18000  ? '#FED976' : '#FFEDA0';
+				    return d > 164135  ? '#BD0026' :
+				           d > 120000 ? '#E31A1C' :
+				           d > 91172 ? '#FC4E2A' :
+				           d > 66784 ? '#FD8D3C' :
+				           d > 34923 ? '#FEB24C' :
+				           d > 34923  ? '#FED976' : '#FFEDA0';
 				}
 				
 				function randomColor(){
@@ -50,7 +57,7 @@
 				// Changes the color of the Polygons within the Choropleth
 				function style(feature) {
 				    return {
-				        fillColor: getColor(feature.properties.Tract2000),
+				        fillColor: getColor(feature.properties.MedInc_d),
 				        weight: 2,
 				        opacity: 1,
 				        color: 'green',
@@ -65,8 +72,10 @@
 									opacity: 0.5,
 								});
 
+				roadLayer.bounds = roadLayer.getBounds();
+;
 				var incomeLayer = L.geoJson(sanfranIncomeData,{style: style});
-
+				incomeLayer.bounds = incomeLayer.getBounds();
 
 
 				var overviewLayer = L.layerGroup();
@@ -93,11 +102,6 @@
 
 				// console.log(values);
 
-				var color = d3.scale.quantize()
-								.domain(values)
-								.range(['rgb(247,252,240)','rgb(224,243,219)','rgb(204,235,197)',
-									'rgb(168,221,181)','rgb(123,204,196)','rgb(78,179,211)',
-									'rgb(43,140,190)','rgb(8,88,158)']);
 
 					// load police district layer
 				var pDistLayer = L.geoJson(policeDistrict, {	
@@ -145,19 +149,47 @@
 					}
 				});
 
+				pDistLayer.bounds = roadLayer.getBounds();
+				overviewLayer.bounds = roadLayer.getBounds();
+
 				var layerGrp = L.layerGroup([overviewLayer]);
 				layerGrp.addTo(map);
 
 
 			// Implement Layer Toggle
 
+				$("#sortable li img").click(function(event){
+					console.log(roadLayer);
+    				var mapid = $(this).parent().attr('id');
+					if(mapid == 'road') {
+						map.fitBounds(roadLayer.bounds);
+					} if (mapid == 'income') {
+						map.fitBounds(incomeLayer.bounds); 
+					} if (mapid == 'district') {
+						map.fitBounds(pDistLayer.bounds);
+					} if (mapid == 'overview') {
+						map.fitBounds(overviewLayer.bounds);
+
+					}
+    				//map.fitBounds(layerLatLng);
+  				});
+
+
 				$( "#sortable" ).sortable({
 				  update: function( event, ui ) { 
 				  }
 				});
 
-				$("#sortable li" ).click(function() {
-					var mapid = $(this).attr('id');
+				$("#sortable .new" ).click(function() {
+					console.log('layer clicked');
+					if ($(this).parent().hasClass('off')) {
+						$(this).parent().addClass('on');
+						$(this).parent().removeClass('off');
+					} else {
+						$(this).parent().addClass('off');
+						$(this).parent().removeClass('on');
+					}
+					var mapid = $(this).parent().attr('id');
 						if(mapid == 'road') {
 							if (layerGrp.hasLayer(roadLayer)) {
 								layerGrp.removeLayer(roadLayer);
@@ -167,8 +199,10 @@
 						} if (mapid == 'income') {
 							if(layerGrp.hasLayer(incomeLayer)) {
 								layerGrp.removeLayer(incomeLayer);
+								map.removeControl(legend);
 							} else {
 								layerGrp.addLayer(incomeLayer);
+								legend.addTo(map);
 							}
 						} if (mapid == 'district') {
 							if(layerGrp.hasLayer(pDistLayer)) {
@@ -219,53 +253,11 @@
 						layerGrp.addTo(map);
 				});
 					
-
-				 // $( "#sortable" ).on( "sortupdate", function( event, ui ) { 
-				 //  	var arrayOfMaps = [];
-				 //  	// layerGrp.removeLayers();
-				 //  	$("#sortable li").each( function() {
-				 //  		// var mapid = $(this).attr('id');
-				 //  		// for (var i = mapArray.length-1; i >= 0 ; i--) {
-				 //  		// 	if (mapid == mapArray[i].mapname) {
-				 //  		// 		map.removeLayer(mapArray[i].layer);
-				 //  		// 		arrayOfMaps.push(mapArray[i].layer);
-				 //  		// 	}
-				 //  		// }
-				 //  	});
-				 //  	// for (var i = mapArray.length-1; i >= 0 ; i--) {
-				 //  	// 		map.addLayer(arrayOfMaps[i]);
-				 //  	// 	}
-				 //  	});
-
 // Closes the nested d3 function calls.
 					$('#overlayLoading').css('display', 'none');			
 				});
 			});	
 		});
-
-						//layerGrp.addTo(map);
-
-				
-				
-				//Implement all crime data
-				 //  $.getJSON("data/sanfranCrimeData.geojson", function(data) {
-				 //   // Define the markercluster
-				 //    var crimeMarkers = new L.MarkerClusterGroup();
-				 //    var geojson = L.geoJson(data, {
-				 //        onEachFeature: function (feature, layer) {
-				 //            // Bind a popup with a chart populated with feature properties 
-				 //            layer.bindPopup(
-				 //            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
-				 //            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
-				 //            	+ '<b>Details</b> ' + feature.properties.Descript + '<br>'
-				 //            	+ '<b>Date:</b> ' + feature.properties.Date + '<br>'
-				 //            	+ '<b>Time:</b> ' + feature.properties.Time + '<br>')
-					// }	
-				 //    });
-				 //    // Put it all together
-				 //    crimeMarkers.addLayer(geojson);
-				 //    map.addLayer(crimeMarkers);    
-				 //  });
 
 			//Implement Overall Crime Data Layer
 				var crime = L.markerClusterGroup();
@@ -408,7 +400,6 @@
 
 
 
-
 			// Implement main crimeData
 				var crimeCatMaps = {
 					"Arson": arsonCrimeLayer,
@@ -423,10 +414,25 @@
 				var controls = L.control.layers(
 					{}, crimeCatMaps, 
 					{
-						title: 'Serious Crime Category',
 						collapsed: false
 						}
 					).addTo(map);
+
+
+				var legend = L.control({position: 'bottomright'});
+
+					legend.onAdd = function (map) {
+
+					    var div = L.DomUtil.create('div', 'income legend');
+
+					        div.innerHTML = "<div class='income legend leaflet-control'><h3>Med Income Legend</h3>" +
+					        "<i style='background:#FFEDA0'></i> $0 – $34923<br><i style='background:#FED976'></i> " +
+					        "$34923 - $66784<br><i style='background:#FEB24C'></i> $66784 - $91172<br><i style='background:#FD8D3C'></i>"+
+					        "$91172 - $120000<br><i style='background:#FC4E2A'></i> $120000 - $164135<br><i style='background:#E31A1C'></i>" + 
+					        "> $164135<br></div>";
+					            
+					    return div;
+					};
 
 
 

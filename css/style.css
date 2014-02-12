@@ -9,3 +9,7 @@ body {
   height: 640px;
   width: 500px;
 }
+
+.off {
+	opacity: 0.5;
+}

@@ -1,0 +1,99 @@
+			#sortable { list-style-type: none; margin: 0; padding: 0; width: 15%; }
+			#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+			#sortable li span { position: absolute; margin-left: -1.3em; }
+
+			#map{
+				height: 800px;
+			}
+
+			.customControl{
+				height: 400px;
+				width: 300px;
+				background-color: #fff;
+				border-radius: 5px;
+				border: solid gainsboro 1px;
+				box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+				padding: 10px 10px;
+			}
+
+			.count-icon {
+			    background:#E0F8E6;
+			    text-align:center;
+			    border:1px solid #000;
+			    font-size: 10;
+			}
+
+			#sortable{
+				background-color: rgba(255,255,255,.7);
+				position: absolute;
+				top: 0;
+				left: 0;
+				margin-left: 10px;
+				margin-top: 20px;
+				z-index: 9999;
+			}
+
+			#overlayLoading{
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,.8);
+				z-index: 99999;
+			}
+
+			#overlayLoading img{
+				position: relative;
+				width: 440px;
+				height: 440px;
+				background-color: rgba(0,0,0,.8);
+				z-index: 99999;
+			}
+
+			#overlayLoading h1{
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				margin-top: -50px;
+				margin-left: -170px;
+				color: white;
+				font-family: sans-serif;
+			}
+
+			.ui-state-default{
+				font-family: sans-serif;
+				font-size: 11pt !important;
+			}
+
+			.heading {
+				font-family: sans-serif;
+			}
+
+			.off {
+				opacity: 0.5;
+			}		
+
+			.new {
+				display: inline;
+			}
+
+			#sortable img {
+				float: right;
+			}
+
+			.legend {
+				padding-left:5px;
+			    line-height: 18px;
+			    color: #555;
+			    background-color: white;
+			    opacity: 1;
+			}
+
+			.legend i {
+		    width: 18px;
+		    height: 18px;
+		    float: left;
+		    margin-right: 8px;
+		    opacity: 0.7;
+			}

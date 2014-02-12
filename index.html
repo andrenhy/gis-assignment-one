@@ -11,80 +11,23 @@
 		<link href="bower_components/leaflet-dist/leaflet.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="bower_components/leaflet.markercluster/dist/MarkerCluster.Default.css">
 		<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' />
+		<link href='bower_components/Leaflet.Pancontrol-0.4.5/src/L.Control.Pan.css' />
 		<link rel="stylesheet" href="css/NavControl.css">
-		<style>
-			#sortable { list-style-type: none; margin: 0; padding: 0; width: 10%; }
-			#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-			#sortable li span { position: absolute; margin-left: -1.3em; }
+		<link rel="stylesheet" href="css/mystyle.css">
 
-			#map{
-				height: 800px;
-			}
-
-			.customControl{
-				height: 400px;
-				width: 300px;
-				background-color: #fff;
-				border-radius: 5px;
-				border: solid gainsboro 1px;
-				box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-				padding: 10px 10px;
-			}
-
-			.count-icon {
-			    background:#E0F8E6;
-			    text-align:center;
-			    border:1px solid #000;
-			    font-size: 10;
-			}
-
-			#sortable{
-				background-color: rgba(255,255,255,.7);
-				position: absolute;
-				top: 0;
-				left: 0;
-				margin-left: 10px;
-				margin-top: 20px;
-				z-index: 9999;
-			}
-
-			#overlayLoading{
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-				background-color: rgba(0,0,0,.8);
-				z-index: 99999;
-			}
-
-			#overlayLoading h1{
-				position: fixed;
-				top: 50%;
-				left: 50%;
-				margin-top: -50px;
-				margin-left: -170px;
-				color: white;
-				font-family: sans-serif;
-			}
-
-			.ui-state-default{
-				font-family: sans-serif;
-				font-size: 11pt !important;
-			}
-  		</style>
 	</head>
 	<body>	
 			<div id="overlayLoading">
-				<h1>Finding the crimes...</h1>
+				<h1>Loading crime data...</h1>
 			</div>
 			<div id="map"></div>
 
 			<ul id="sortable">
-			<li class="ui-state-default" id ='overview'><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Crime Overview</li>
-			  <li class="ui-state-default" id ='district'><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>District Zones</li>
-			  <li class="ui-state-default" id ='income'><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Income Distribution</li>
-			  <li class="ui-state-default" id ='road'><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Road Map</li>
+			<li class ="heading">Data Overlay</li>
+			<li class="ui-state-default on " id ='overview'><div class="new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Crime Overview </div><img src='img/location.png'/></li>
+			  <li class="ui-state-default off" id ='district'><div class="new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>District Zones  </div><img src='img/location.png'/></li>
+			  <li class="ui-state-default off" id ='income'><div class="new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Income Distribution  </div><img src='img/location.png'/></li>
+			  <li class="ui-state-default off" id ='road'><div class="new"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Road Map </div> <img src='img/location.png'/></li>
 			</ul>
 
 		<!-- jQuery -->
@@ -100,17 +43,17 @@
 		<script src="bower_components/underscore/underscore.js"></script>
 		<script src="js/NavControl.js"></script>
 		<script src="bower_components/html5sortable/jquery.sortable.js"></script>
-		<script src="data/policeDist.js"></script>
-		<script src="data/sanfranIncomeData.js"></script>
-		<script src="data/sanfranCrimeData.js"></script>
-		<script src="data/arsonCrime.js"></script>
-		<script src="data/sexCrime.js"></script>
-		<script src="data/assaultCrime.js"></script>
-		<script src="data/drugCrime.js"></script>
-		<script src="data/kidnapCrime.js"></script>
-		<script src="data/prostitutionCrime.js"></script>
-		<script src="data/robberyCrime.js"></script>
-		<script src="data/weaponCrime.js"></script>
+		<script src="js/policeDist.js"></script>
+		<script src="js/sanfranIncomeData.js"></script>
+		<script src="js/sanfranCrimeData.js"></script>
+		<script src="js/arsonCrime.js"></script>
+		<script src="js/sexCrime.js"></script>
+		<script src="js/assaultCrime.js"></script>
+		<script src="datajs/drugCrime.js"></script>
+		<script src="js/kidnapCrime.js"></script>
+		<script src="js/prostitutionCrime.js"></script>
+		<script src="js/robberyCrime.js"></script>
+		<script src="js/weaponCrime.js"></script>
 		<script src ="js/app.js"></script>
 	</body>
 </html>
