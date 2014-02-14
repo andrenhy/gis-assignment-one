@@ -274,12 +274,69 @@
         		});   
         		//crime.addLayer(points_rand);
 				//map.addLayer(crime);  
+			// define all the icons
+				var arsonIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_purple.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+			
+				var assaultIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_white.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+
+				var robberyIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_blue.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+
+				var drugIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_red.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+
+				var kidnapIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_yellow.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+
+				var prostIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_green.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});	
+
+				var sexIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_black.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+
+				var weaponIcon = L.icon({
+					iconUrl: 'http://labs.google.com/ridefinder/images/mm_20_brown.png',
+					iconAnchor: [16, 37],
+					popupAnchor: [0, -28]
+				});
+
+
+
 
 			//Implement arson Crime Data Layer
 				var arsonCrimeLayer = L.markerClusterGroup();
+
 				var arsonPoints = L.geoJson(arsonCrimeData, {
+
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: arsonIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
+
 			            layer.bindPopup(
 			            	'<b>S/N:</b> ' + feature.properties.IncidntNum +'<br>'
 			            	+ '<b>Category:</b> ' + feature.properties.Categorty + '<br>'
@@ -290,9 +347,14 @@
         		});   
         		arsonCrimeLayer.addLayer(arsonPoints);
 
+
 			//Implement assault Crime Data Layer
 				var assaultCrimeLayer = L.markerClusterGroup();
+
 				var assaultPoints = L.geoJson(assaultCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: assaultIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
@@ -308,6 +370,9 @@
 			//Implement robbery Crime Data Layer
 				var robberyCrimeLayer = L.markerClusterGroup();
 				var robberyPoints = L.geoJson(robberyCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: robberyIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
@@ -324,6 +389,9 @@
 			//Implement drug Crime Data Layer
 				var drugCrimeLayer = L.markerClusterGroup();
 				var drugPoints = L.geoJson(drugCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: drugIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
@@ -340,6 +408,9 @@
 			//Implement kidnap Crime Data Layer
 				var kidnapCrimeLayer = L.markerClusterGroup();
 				var kidnapPoints = L.geoJson(kidnapCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: kidnapIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
@@ -356,6 +427,9 @@
 			//Implement Prostitiution Crime Data Layer
 				var prostitutionCrimeLayer = L.markerClusterGroup();
 				var prostitutionPoints = L.geoJson(prostitutionCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: prostIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
@@ -371,6 +445,9 @@
 			//Implement sex Crime Data Layer
 				var sexCrimeLayer = L.markerClusterGroup();
 				var sexPoints = L.geoJson(sexCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: sexIcon});
+					},
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
@@ -386,6 +463,10 @@
 			//Implement weapon Crime Data Layer
 				var weaponCrimeLayer = L.markerClusterGroup();
 				var weaponPoints = L.geoJson(weaponCrimeData, {
+					pointToLayer: function (feature, latlng) {
+							return L.marker(latlng, {icon: weaponIcon});
+					},
+
     				onEachFeature: function (feature, layer)
         			{
 		            layer.bindPopup(
